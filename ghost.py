@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((width,height))
 images={}
 images["bg"] = pygame.image.load("tower.png").convert_alpha()
 images["ghost"] = pygame.image.load("ghost-standing.png").convert_alpha()
-images["door"] = pygame.image.load("door.png").convert_alpha()
+images["window"] = pygame.image.load("door.png").convert_alpha()
 groundy=-50
 
 score=0
@@ -41,7 +41,7 @@ class Ghost:
         #pygame.draw.rect(screen,(250,150,50),self.rect)
         screen.blit(images["ghost"],self.rect) 
 
-class Door:
+class Window:
    
     def __init__(self,y): 
         self.speed=3
@@ -50,7 +50,7 @@ class Door:
         self.rect2=pygame.Rect(self.gap,y+240,100,5)
         
     def display(self):  
-        screen.blit(images["door"],self.rect1)
+        screen.blit(images["window"],self.rect1)
         #pygame.draw.rect(screen,(250,150,50),self.rect2)
     
     def move(self):
@@ -67,8 +67,8 @@ class Door:
 state="play"
 ghost= Ghost()
 
-d1=Door(-200) 
-d2=Door(-500)     
+w1=Window(-200) 
+w2=Window(-500)     
 while True:    
     screen.fill((50,150,255))
     screen.blit(images["bg"],[0,groundy])
@@ -89,20 +89,21 @@ while True:
         if groundy>=0:
             groundy=-125                  
         ghost.gravity() 
-        d1.move()
-        d2.move()
-        d1.display()
-        d2.display()
+        w1.move()
+        w2.move()
+        w1.display()
+        w2.display()
         ghost.display()
         
     if state=="over":
         over_text=score_font.render("Game Over", False, (255,255,0))  
         screen.blit(over_text,[230,250]) 
     
-    if ghost.rect.colliderect(d1.rect2) or ghost.rect.colliderect(d2.rect2):
+    if ghost.rect.colliderect(w1.rect2) or ghost.rect.colliderect(w2.rect2):
         state="over"
     
-    
+    if ghost.rect.y>600:
+        state="over"
 
     pygame.display.update() 
     clock.tick(30) 
